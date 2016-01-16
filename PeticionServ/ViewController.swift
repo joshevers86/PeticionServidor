@@ -75,17 +75,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let link = "https://openlibrary.org/api/books?jscmd=data&format=json&bibkeys=ISBN:\(isbn)"
         let url = NSURL(string: link) // conversion de la string a formato url
         let datos = NSData(contentsOfURL: url!) // se realiza la peticion al servidor
-        let texto = NSString(data: datos!, encoding: NSUTF8StringEncoding) //datos obtenidos en el formato UTF8
         
-        if texto != nil {
+        
+        if datos != nil {
+            let texto = NSString(data: datos!, encoding: NSUTF8StringEncoding) //datos obtenidos en el formato UTF8
             print(texto!)
             resultado.textColor = UIColor.greenColor()
             resultado.text = "Recurso Disponible"
             rest = "\(texto!)"
             boton.enabled = true
         }else {
-            resultado.textColor = UIColor.redColor()
-            resultado.text = "Recurso NO Disponible"
+            let alertController = UIAlertController(title: "Error", message: "Ha habido un problema conectando con el servidor. Revisa tu conexión a internet y vuelve a intentarlo.", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Aceptar", style: UIAlertActionStyle.Default,handler: nil))
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
         }
         
         /*
